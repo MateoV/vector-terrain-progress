@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Vector Terrain v1.1 | Live Progress</title>
+<script src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
+<script src='ext/base64.js'></script>
+<script src='ext/underscore-min.js'></script>
+<script src='ext/github.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script>
+
+var map = L.mapbox.map('map', 'examples.map-h67hf2ic')
+  .setView([0, 0], 2);
+
+var featureLayer = L.mapbox.featureLayer().addTo(map);
+
+var g = new Github({
+  token: "36caa6574ca46dc283b487aeecf9433575b62ac6",
+  auth: "oauth"
+});
+
+function load() {
+    var gist = g.getGist('fc4d1a8eab4abc06d880');
+    gist.read(function(err, gist) {
+        geojson = JSON.parse(gist.files['vector-terrain-progress.geojson'].content);
+        featureLayer.setGeoJSON(geojson);
+    });
+    setTimeout(function() { load(); }, 10000);
+}
+
+$(load);
+</script>
+
+</body>
+</html>
